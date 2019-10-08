@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="aes_test" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/aes_test" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/aes_test" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="include/mbedtls/aes.h" />
+		<Unit filename="include/mbedtls/aesni.h" />
+		<Unit filename="include/mbedtls/arc4.h" />
+		<Unit filename="include/mbedtls/aria.h" />
+		<Unit filename="include/mbedtls/asn1.h" />
+		<Unit filename="include/mbedtls/asn1write.h" />
+		<Unit filename="include/mbedtls/base64.h" />
+		<Unit filename="include/mbedtls/bignum.h" />
+		<Unit filename="include/mbedtls/blowfish.h" />
+		<Unit filename="include/mbedtls/bn_mul.h" />
+		<Unit filename="include/mbedtls/camellia.h" />
+		<Unit filename="include/mbedtls/ccm.h" />
+		<Unit filename="include/mbedtls/chacha20.h" />
+		<Unit filename="include/mbedtls/chachapoly.h" />
+		<Unit filename="include/mbedtls/check_config.h" />
+		<Unit filename="include/mbedtls/cipher.h" />
+		<Unit filename="include/mbedtls/cipher_internal.h" />
+		<Unit filename="include/mbedtls/cmac.h" />
+		<Unit filename="include/mbedtls/compat-1.3.h" />
+		<Unit filename="include/mbedtls/config.h" />
+		<Unit filename="include/mbedtls/ctr_drbg.h" />
+		<Unit filename="include/mbedtls/des.h" />
+		<Unit filename="include/mbedtls/dhm.h" />
+		<Unit filename="include/mbedtls/ecdh.h" />
+		<Unit filename="include/mbedtls/ecdsa.h" />
+		<Unit filename="include/mbedtls/ecjpake.h" />
+		<Unit filename="include/mbedtls/ecp.h" />
+		<Unit filename="include/mbedtls/ecp_internal.h" />
+		<Unit filename="include/mbedtls/entropy.h" />
+		<Unit filename="include/mbedtls/entropy_poll.h" />
+		<Unit filename="include/mbedtls/error.h" />
+		<Unit filename="include/mbedtls/gcm.h" />
+		<Unit filename="include/mbedtls/havege.h" />
+		<Unit filename="include/mbedtls/hkdf.h" />
+		<Unit filename="include/mbedtls/hmac_drbg.h" />
+		<Unit filename="include/mbedtls/md.h" />
+		<Unit filename="include/mbedtls/md2.h" />
+		<Unit filename="include/mbedtls/md4.h" />
+		<Unit filename="include/mbedtls/md5.h" />
+		<Unit filename="include/mbedtls/md_internal.h" />
+		<Unit filename="include/mbedtls/memory_buffer_alloc.h" />
+		<Unit filename="include/mbedtls/nist_kw.h" />
+		<Unit filename="include/mbedtls/oid.h" />
+		<Unit filename="include/mbedtls/padlock.h" />
+		<Unit filename="include/mbedtls/pem.h" />
+		<Unit filename="include/mbedtls/pk.h" />
+		<Unit filename="include/mbedtls/pk_internal.h" />
+		<Unit filename="include/mbedtls/pkcs12.h" />
+		<Unit filename="include/mbedtls/pkcs5.h" />
+		<Unit filename="include/mbedtls/platform.h" />
+		<Unit filename="include/mbedtls/platform_time.h" />
+		<Unit filename="include/mbedtls/platform_util.h" />
+		<Unit filename="include/mbedtls/poly1305.h" />
+		<Unit filename="include/mbedtls/psa_util.h" />
+		<Unit filename="include/mbedtls/ripemd160.h" />
+		<Unit filename="include/mbedtls/rsa.h" />
+		<Unit filename="include/mbedtls/rsa_internal.h" />
+		<Unit filename="include/mbedtls/sha1.h" />
+		<Unit filename="include/mbedtls/sha256.h" />
+		<Unit filename="include/mbedtls/sha512.h" />
+		<Unit filename="include/mbedtls/threading.h" />
+		<Unit filename="include/mbedtls/timing.h" />
+		<Unit filename="include/mbedtls/version.h" />
+		<Unit filename="include/mbedtls/xtea.h" />
+		<Unit filename="include/psa/crypto.h" />
+		<Unit filename="include/psa/crypto_accel_driver.h" />
+		<Unit filename="include/psa/crypto_driver_common.h" />
+		<Unit filename="include/psa/crypto_entropy_driver.h" />
+		<Unit filename="include/psa/crypto_extra.h" />
+		<Unit filename="include/psa/crypto_platform.h" />
+		<Unit filename="include/psa/crypto_se_driver.h" />
+		<Unit filename="include/psa/crypto_sizes.h" />
+		<Unit filename="include/psa/crypto_struct.h" />
+		<Unit filename="include/psa/crypto_types.h" />
+		<Unit filename="include/psa/crypto_values.h" />
+		<Unit filename="library/aes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/aesni.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/arc4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/aria.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/asn1parse.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/asn1write.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/base64.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/bignum.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/blowfish.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/camellia.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/ccm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/chacha20.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/chachapoly.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/cipher.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/cipher_wrap.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/cmac.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/ctr_drbg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/des.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/dhm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/ecdh.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/ecdsa.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/ecjpake.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/ecp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/ecp_curves.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/entropy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/entropy_poll.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/error.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/gcm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/havege.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/hkdf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/hmac_drbg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/md.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/md2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/md4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/md5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/memory_buffer_alloc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/nist_kw.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/oid.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/padlock.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/pem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/pk.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/pk_wrap.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/pkcs12.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/pkcs5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/pkparse.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/pkwrite.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/platform.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/platform_util.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/poly1305.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/psa_crypto.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/psa_crypto_core.h" />
+		<Unit filename="library/psa_crypto_invasive.h" />
+		<Unit filename="library/psa_crypto_its.h" />
+		<Unit filename="library/psa_crypto_se.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/psa_crypto_se.h" />
+		<Unit filename="library/psa_crypto_service_integration.h" />
+		<Unit filename="library/psa_crypto_slot_management.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/psa_crypto_slot_management.h" />
+		<Unit filename="library/psa_crypto_storage.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/psa_crypto_storage.h" />
+		<Unit filename="library/psa_its_file.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/ripemd160.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/rsa.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/rsa_internal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/sha1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/sha256.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/sha512.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/threading.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/timing.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/version.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/version_features.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="library/xtea.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
