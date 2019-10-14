@@ -1,0 +1,3 @@
+/home/twsa/project
+/home/twsa/project/alps
+/home/twsa/project/alps/external/gree/
