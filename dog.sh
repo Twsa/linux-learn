@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-setup_content=$HOME/Desktop/my_test/qcd/
+setup_content=$HOME/Desktop/my_test/qcd
 if [ ! -d $setup_content ]; then
   mkdir $setup_content
 fi
@@ -84,7 +84,25 @@ enter()
 #清空所有的目录
 clear()
 {
-    rm $qcd_dir
+    if [ -e $qcd_dir ];then
+        echo -e "$qcd_dir exit,\nreally clear it? [Y/n]: " 
+        read  REPLACE
+        case $REPLACE in
+            [yY][eE][sS]|[yY])
+            REPLACE="yes"
+            echo "$qcd_dir have removed."
+            >$qcd_dir
+            ;;
+            [nN][oO]|[nN])
+            REPLACE="no"
+            echo "do nothing!"
+            ;;
+            *)
+            echo "Input error, should be [Y/n]."
+            exit 1
+        esac    
+    fi
+    #rm $qcd_dir
 }
 #一些事件的处理过程
 case $1 in
