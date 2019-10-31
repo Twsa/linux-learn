@@ -82,7 +82,7 @@ enter()
 }
 
 #清空所有的目录
-clear()
+clear_all()
 {
     if [ -e $qcd_dir ];then
         echo -e "$qcd_dir exit,\nreally clear it? [Y/n]: " 
@@ -116,7 +116,7 @@ case $1 in
     list  
     ;;
 -c)
-    clear 
+    clear_all 
     ;;
 -e)
     enter

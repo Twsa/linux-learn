@@ -1,3 +1,3 @@
-/home/twsa/project
-/home/twsa/project/alps
-/home/twsa/project/alps/external/gree/
+/home/twsa/project/alps/external/gree
+/home/twsa/project/
+/home/twsa/Desktop/my_test
