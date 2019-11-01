@@ -10,26 +10,28 @@
 
 
 #define SERVER_FIFO_NAME "/tmp/serv_fifo"
-// #define CLIENT_FIFO_NAME "/tmp/client_%d_fifo"
+#define CLIENT_FIFO_NAME "/tmp/client_fifo"
 #define CNTL_WORD_NUMS 12
 #define BUFFER_SIZE 20
+#define JSON_BUF 64
 
 #include "client.h"
 #include <ctype.h>
 #include "cJSON.h"
-char jsonBuffer[BUFSIZ];
 
-int ctl_word_handle(const char *const word,size_t len,bool status);
 
+int ctl_word_handle(const char *const word,size_t len,int status);
+int client_send_ok(const char *const client_buf,const size_t len);
 char *ctrl_word[11]={"pow","auto","cold_mode","hot_mode",\
 "lesswet_mode","air_supy","windsped","temp","left_right","up_down","sleep"};
 
 int main()
 {
-    int server_fifo_fd,client_fifo_fd;
-    int res;
-    cJSON *root,item;
+    int server_fifo_fd;
+    int res,status;
+    cJSON *root;
     char cntl_word[BUFFER_SIZE];
+    char jsonBuffer[JSON_BUF];
 
     if(access(SERVER_FIFO_NAME,F_OK)==-1){
         res=mkfifo(SERVER_FIFO_NAME,0777);
@@ -37,25 +39,47 @@ int main()
             fprintf(stderr,"Cound not create fifo %s\n",SERVER_FIFO_NAME);
         }
     }
-       server_fifo_fd=open(SERVER_FIFO_NAME,O_RDONLY);
+    server_fifo_fd=open(SERVER_FIFO_NAME,O_RDONLY);
         if(server_fifo_fd == -1){
             fprintf(stderr,"Sorry.no server\n");
             exit(EXIT_FAILURE);
         }
-    printf("Reading pipe\n");     //只有添加这个，才会显示第一条接受的信息？
+    if(access(CLIENT_FIFO_NAME,F_OK)==-1){
+        res=mkfifo(CLIENT_FIFO_NAME,0777);
+        if(res!=0){
+            fprintf(stderr,"Cound not create client  fifo %s\n",CLIENT_FIFO_NAME);
+        }
+    }//创建客户端管道
+
+    // printf("Reading pipe\n");     //只有添加这个，才会显示第一条接受的信息？
     while(1)
     {
- 
-        do{
-            res=read(server_fifo_fd,jsonBuffer,sizeof(jsonBuffer));
-        }while(res<0);
-        root=cJSON_Parse(jsonBuffer);
-        strcpy(cntl_word,cJSON_GetObjectItem(root,"t")->valuestring);
-        bool status=cJSON_GetObjectItem(root,"p")->type;
-        server_fifo_fd=open(SERVER_FIFO_NAME,O_RDONLY);
-        // printf("type: %s,",cntl_word);
-        // printf("opt: %s\n",status==false?"false":"true"); 
-        ctl_word_handle(cntl_word,BUFFER_SIZE,status);
+        memset(jsonBuffer,'\0',sizeof(jsonBuffer));
+        res=read(server_fifo_fd,jsonBuffer,sizeof(jsonBuffer));
+        if(res == -1)
+        {
+            fprintf(stderr,"Read error on server pipe\n");
+            exit(EXIT_FAILURE);
+        }
+        else if (res>0)
+        {
+            root=cJSON_Parse(jsonBuffer);
+            strcpy(cntl_word,cJSON_GetObjectItem(root,"t")->valuestring);
+            status=cJSON_GetObjectItem(root,"p")->valueint;
+            cJSON_Delete(root);
+            printf("[server] jsonBUffer: %s\n",jsonBuffer);
+            // printf("type: %s,",cntl_word);
+            // printf("opt: %s\n",status); 
+            ctl_word_handle(cntl_word,BUFFER_SIZE,status);
+        }
+        // else if(res==0){
+        //     server_fifo_fd=open(SERVER_FIFO_NAME,O_RDONLY);
+        //     if(server_fifo_fd == -1){
+        //         fprintf(stderr,"Sorry.no server\n");
+        //         exit(EXIT_FAILURE);
+        //     }
+        // }
+        // printf("res:%d\n",res);
     }
     close(server_fifo_fd);
     unlink(SERVER_FIFO_NAME);
@@ -63,7 +87,7 @@ int main()
 }
 
 
-int ctl_word_handle(const char *const word,size_t len,bool status)
+int ctl_word_handle(const char *const word,size_t len,int status)
 {
     char buffer[BUFFER_SIZE]={0};
     memcpy(buffer,word,BUFFER_SIZE);
@@ -84,20 +108,51 @@ int ctl_word_handle(const char *const word,size_t len,bool status)
     }
     switch (handleIndex)
     {
-    case 0:printf("pow: %s\n",status==false?"false":"true");break;
-    case 1:printf("auto: %s\n",status==false?"false":"true");break;
-    case 2:printf("cold_mode: %s\n",status==false?"false":"true");break;
-    case 3:printf("hot_mode: %s\n",status==false?"false":"true");break;
-    case 4:printf("lesswet_mode: %s\n",status==false?"false":"true");break;
-    case 5:printf("air_supy: %s\n",status==false?"false":"true");break;
-    case 6:printf("windsped: %s\n",status==false?"false":"true");break;
-    case 7:printf("temp: %s\n",status==false?"false":"true");break;
-    case 8:printf("left_right: %s\n",status==false?"false":"true");break;
-    case 9:printf("up_down: %s\n",status==false?"false":"true");break;
-    case 10:printf("sleep: %s\n",status==false?"false":"true");break;
+    case 0:printf("%s: %d\n",ctrl_word[handleIndex],status);break;
+    case 1:printf("auto: %d\n",status);break;
+    case 2:printf("cold_mode: %d\n",status);break;
+    case 3:printf("hot_mode: %d\n",status);break;
+    case 4:printf("lesswet_mode: %d\n",status);break;
+    case 5:printf("air_supy: %d\n",status);break;
+    case 6:printf("windsped: %d\n",status);break;
+    case 7:printf("temp: %d\n",status);break;
+    case 8:printf("left_right: %d\n",status);break;
+    case 9:printf("up_down: %d\n",status);break;
+    case 10:printf("sleep: %d\n",status);break;
     default:
         break;
     }
+    printf("%s: %d\n",ctrl_word[handleIndex],status);
+    client_send_ok(ctrl_word[handleIndex],BUFFER_SIZE);
+    return 0;
+}
+
+int client_send_ok(const char *const client_buf,const size_t len)
+{
+    int client_fifo_fd;
+    int res;
+    cJSON *root;
+    char buf[BUFFER_SIZE]={0};
+    char jsonBuf[JSON_BUF]={0};
+    //准备客户端的返回json
+    memcpy(buf,client_buf,len); 
+    root=cJSON_CreateObject();
+    cJSON_AddItemToObject(root,"t",cJSON_CreateString(buf));
+    cJSON_AddItemToObject(root,"s",cJSON_CreateString("ok"));
+    strcpy(jsonBuf,cJSON_PrintUnformatted(root));
+
+    client_fifo_fd=open(CLIENT_FIFO_NAME,O_WRONLY);
+    if(client_fifo_fd == -1){
+        fprintf(stderr,"Client fifo failure\n");
+        return -1;
+    }
+    res = write(client_fifo_fd,jsonBuf,sizeof(jsonBuf));
+    if(res == -1){
+        fprintf(stderr,"Write error on client pipe\n");
+        return -2;
+    }
+    cJSON_Delete(root);
+    close(client_fifo_fd);
     return 0;
 }
 // #define SERVER_FIFO_NAME "/tmp/serv_fifo"
