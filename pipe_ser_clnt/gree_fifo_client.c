@@ -7,31 +7,41 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdbool.h>
-
+#include <ctype.h>
 
 #define SERVER_FIFO_NAME "/tmp/serv_fifo"
-#define CLIENT_FIFO_NAME "/tmp/client_fifo" 
-#define CNTL_WORD_NUMS 12
-#define BUFFER_SIZE 20
+#define CLIENT_FIFO_NAME "/tmp/client_fifo"
+#define CNTL_WORD_NUMS 7
+#define BUFFER_SIZE_PIPE 20
 #define JSON_BUF 64
 
-#include "client.h"
-#include <ctype.h>
-#include "cJSON.h"
+#include "../include/gree_fifo_client.h"
+// #include "../include/gree_indoor.h"
+#include "../include/cJSON.h"
+#include "../include/label.h"
+
 
 // twsa@a:~/Desktop/my_test/pipe_ser_clnt$ gcc pipe_clnt.c cJSON.c -o clnt  -lm 
-int ctl_word_handle(const char *const word,const int status);
-int client_send_ok(const char *const client_buf,const size_t len);
-char *ctrl_word[11]={"pow","auto","cold_mode","hot_mode",\
-"lesswet_mode","air_supy","windsped","temp","left_right","up_down","sleep"};
+static int ctl_word_handle(const __uint8_t *const word,const __uint8_t status);
+static int client_send_ok(const __uint8_t *const client_buf,const size_t len,const __uint8_t stat);
+// static int wifi_2_red_pipe(const __uint8_t handle_handle,const __uint8_t status)   ;
+__uint8_t *ctrl_word[11]={"pow","mode","windsped","temp",\
+"left_right","up_down","sleep"};
+extern char redF0[34];
+extern unsigned short int ARRBUF[ARRBUF_SUM];
 
-int main()
+
+void gree_fifo_client(void)
 {
+/*#if INFRARED_PRINTF
+    cout<<"[gree_fifo_client]___func___"<<__func__<<endl;
+#endif */
     int server_fifo_fd;
-    int res,status;
+    int res;
+    __uint8_t status;
+    __uint8_t cntl_word[BUFFER_SIZE_PIPE];
+    __uint8_t jsonBuffer[JSON_BUF];
     cJSON *root;
-    char cntl_word[BUFFER_SIZE];
-    char jsonBuffer[JSON_BUF];
 
     if(access(SERVER_FIFO_NAME,F_OK)==-1){
         res=mkfifo(SERVER_FIFO_NAME,0777);
@@ -86,11 +96,11 @@ int main()
 * Return      : -1,没有找到所接受的字段；0,处理成功
 * Version     : v1.0
 */
-int ctl_word_handle(const char *const word,const int status)
+static int ctl_word_handle(const __uint8_t *const word,const __uint8_t status)
 {
-    char buffer[BUFFER_SIZE]={0};
-    memcpy(buffer,word,BUFFER_SIZE);
-    int handleIndex=0;
+    __uint8_t buffer[BUFFER_SIZE_PIPE]={0};
+    memcpy(buffer,word,BUFFER_SIZE_PIPE);
+    __uint8_t handleIndex=0;
     for(int i=0;i<CNTL_WORD_NUMS;i++)
     {
         if(!strcmp(buffer,ctrl_word[i])){
@@ -106,24 +116,72 @@ int ctl_word_handle(const char *const word,const int status)
             }
         }
     }       //查找字段的名字
+
+    __uint8_t wind,tmp;
+
     switch (handleIndex)
     {
-    case 0:break;
-    case 1:break;
-    case 2:break;
-    case 3:break;
-    case 4:break;
-    case 5:break;
-    case 6:break;
-    case 7:break;
-    case 8:break;
-    case 9:break;
-    case 10:break;
+    case 0:
+            redF0[0] = status<<3;
+            redF0[16] = (redF0[0]+redF0[2]+redF0[4]+redF0[6]+redF0[8]+redF0[10]+redF0[12]+redF0[14]+0x08)&0x0f;//校验位
+            //redF0[33] = (redF0[17]+redF0[19]+redF0[21]+redF0[23]+redF0[25]+redF0[27]+redF0[29]+redF0[31]+0x08)&0x0f;
+            break;
+
+    case 1:
+            redF0[0] = (redF0[0] & 0x08)|(status & 0x07);
+            redF0[16] = (redF0[0]+redF0[2]+redF0[4]+redF0[6]+redF0[8]+redF0[10]+redF0[12]+redF0[14]+0x08)&0x0f;//校验位
+            break;
+    case 2:
+        wind = redF0[31] & 0X07;
+        if(wind < 4 && status == 1)
+        {
+            redF0[1] ++;
+            redF0[31] ++;
+        }
+        else if(wind >= 4&& wind < 8 && status == 1)
+        {
+            redF0[31] ++; 
+        }else if(wind <= 4 && status == 0)
+        {
+            redF0[1] --;
+            redF0[31] --;
+        }
+        else if(wind > 4&& wind < 8 && status == 1)
+        {
+            redF0[31] --; 
+        }
+
+        redF0[16] = (redF0[0]+redF0[2]+redF0[4]+redF0[6]+redF0[8]+redF0[10]+redF0[12]+redF0[14]+0x08)&0x0f;//校验位
+        redF0[33] = (redF0[17]+redF0[19]+redF0[21]+redF0[23]+redF0[25]+redF0[27]+redF0[29]+redF0[31]+0x08)&0x0f;
+        break;
+    case 3:
+    if(status == 1)
+        redF0[2] ++;
+    else if(status == 0)
+        redF0[2] --;
+
+        tmp = redF0[2];
+        redF0[16] = (redF0[0]+redF0[2]+redF0[4]+redF0[6]+redF0[8]+redF0[10]+redF0[12]+redF0[14]+0x08)&0x0f;//校验位
+        break;
+        
+    case 4:
+        redF0[9] = status & 0x01;
+        break;
+
+    case 5:
+        redF0[10] = status & 0x01;
+        redF0[16] = (redF0[0]+redF0[2]+redF0[4]+redF0[6]+redF0[8]+redF0[10]+redF0[12]+redF0[14]+0x08)&0x0f;//校验位
+        break;
+
+    case 6:
+        redF0[1] = ((status & 0x01)<<3)|(redF0[1]&0x07);
+        break;
     default:
         break;
     }
     printf("%s: %d\n",ctrl_word[handleIndex],status);
-    client_send_ok(ctrl_word[handleIndex],BUFFER_SIZE); 
+    usleep(10);  //等待10ms
+    client_send_ok(ctrl_word[handleIndex],BUFFER_SIZE_PIPE,status); 
     return 0;
 }
 
@@ -136,18 +194,18 @@ int ctl_word_handle(const char *const word,const int status)
 * Return      : -1,客户端管道打开失败,处理成功；-2,客户端管道写入失败；0,成功
 * Version     : v1.0
 */
-int client_send_ok(const char *const client_buf,const size_t len)
+static int client_send_ok(const __uint8_t *const client_buf,const size_t len,const __uint8_t stat)
 {
     int client_fifo_fd;
     int res;
     cJSON *root;
-    char buf[BUFFER_SIZE]={0};
-    char jsonBuf[JSON_BUF]={0};
+    __uint8_t buf[BUFFER_SIZE_PIPE]={0};
+    __uint8_t jsonBuf[JSON_BUF]={0};
     //准备客户端的返回json
     memcpy(buf,client_buf,len); 
     root=cJSON_CreateObject();
     cJSON_AddItemToObject(root,"t",cJSON_CreateString(buf));
-    cJSON_AddItemToObject(root,"s",cJSON_CreateNumber(1));
+    cJSON_AddItemToObject(root,"s",cJSON_CreateNumber(stat));
     strcpy(jsonBuf,cJSON_PrintUnformatted(root));
 
     client_fifo_fd=open(CLIENT_FIFO_NAME,O_WRONLY);
@@ -164,3 +222,22 @@ int client_send_ok(const char *const client_buf,const size_t len)
     close(client_fifo_fd);
     return 0;
 }
+
+
+/*
+* Func Name   : wifi_2_red
+* Author      : liuchuanjia
+* Date        : 2019/11/01
+* Description : 根据更改的空体控制字段，对红外码特定的控制位进行更改
+* Param       : None
+* Return      : None
+* Version     : v1.0
+*/
+// static int wifi_2_red_pipe(const __uint8_t handle_handle,const __uint8_t status)          
+// { 
+
+//     redF0[handle_handle]= status<<3 | 0x08;  //
+
+//     printf("%#X\n",redF0[0]);
+//     return 0;
+// }   
