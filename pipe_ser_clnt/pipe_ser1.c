@@ -51,8 +51,8 @@ int main(int argc ,char *argv[])
     root=cJSON_CreateObject();
     // if(i==11) {mode_i=0;status_i=1;}
     // cjson_test(mode_i++,status_i);
-    cJSON_AddItemToObject(root,"t",cJSON_CreateString(argv[1]));
-    cJSON_AddItemToObject(root,"p",cJSON_CreateNumber(atoi(argv[2])));
+    cJSON_AddItemToObject(root,"query",cJSON_CreateString(argv[1]));
+    cJSON_AddItemToObject(root,"p",cJSON_CreateString(argv[2]));
     strcpy(jsonBuffer,cJSON_PrintUnformatted(root));
     cJSON_Delete(root);
     res = write(server_fifo_fd,jsonBuffer,sizeof(jsonBuffer));  

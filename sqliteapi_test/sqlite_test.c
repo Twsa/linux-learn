@@ -74,7 +74,7 @@ void save_engy_info_5mins(int parameter)
     sqlite3_bind_double(stmt,2,engyTest);
 
     // rc=sqlite3_exec ( db,"insert into twsa values(buffer,'测试')",NULL,NULL,&errMsg );
-    sqlite3_step(stmt);
+    sqlite3_step(stmt); 
     sqlite3_finalize(stmt);
 
     if ( rc != SQLITE_OK ) {
