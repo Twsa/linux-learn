@@ -6,7 +6,7 @@ Buildroot手册由Buildroot开发人员编写。 它是根据GNU通用公共许�
 
 版权所有©2004-2019 Buildroot开发人员
 
-![1](/home/twsa/Desktop/my_test/pics/1.png)
+![1](pics/1.png)
 
 # 第一卷 入门
 
