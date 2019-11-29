@@ -1,3 +1,5 @@
+[toc] 
+
 # Buildroot 用户手册
 
 ​	Buildroot 2019.11-rc3手册，由git版本584312d16f于2019-11-28 23:17:07 UTC生成
