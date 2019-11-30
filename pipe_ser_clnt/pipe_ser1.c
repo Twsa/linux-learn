@@ -13,11 +13,19 @@
 char *ctrl_word[11]={"pow","auto","cold_mode","hot_mode",\
 "lesswet_mode","air_supy","windsped","temp","left_right","up_down","sleep"};
 
+char *online_words[64]={
+    "打开空调","关闭空调","调高温度",\
+    "调低温度","调高风速","降低风速",\
+    "上下扫风","左右扫风","打开睡眠",\
+    "关闭睡眠"\
+};   
+
 #include <ctype.h>
 #include "cJSON.h"
 #define JSON_BUF 64
 char jsonBuffer[JSON_BUF];
 
+// rcgcc cJSON.c pipe_ser1.c  -o ser1 -lm && adb push ser1 /userdata
 int main(int argc ,char *argv[])
 {
     int server_fifo_fd;
@@ -25,8 +33,8 @@ int main(int argc ,char *argv[])
     cJSON *root;
     int client_fifo_fd;
     
-    if(argc<3){
-        fprintf(stderr,"Please input two params\n");
+    if(argc<2){
+        fprintf(stderr,"Please input one params\n");
         exit(EXIT_FAILURE);
     }
    if(access(SERVER_FIFO_NAME,F_OK)==-1){
@@ -51,8 +59,8 @@ int main(int argc ,char *argv[])
     root=cJSON_CreateObject();
     // if(i==11) {mode_i=0;status_i=1;}
     // cjson_test(mode_i++,status_i);
-    cJSON_AddItemToObject(root,"query",cJSON_CreateString(argv[1]));
-    cJSON_AddItemToObject(root,"p",cJSON_CreateString(argv[2]));
+    int i=atoi(argv[1]);
+    cJSON_AddItemToObject(root,"query",cJSON_CreateString(online_words[i]));
     strcpy(jsonBuffer,cJSON_PrintUnformatted(root));
     cJSON_Delete(root);
     res = write(server_fifo_fd,jsonBuffer,sizeof(jsonBuffer));  
