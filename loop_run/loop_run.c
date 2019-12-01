@@ -35,7 +35,7 @@ int main (int argc,char *argv[])
 
 static void timer_handle(int sign)
 {
-    if(time_tmp--==0){
+    if(--time_tmp==0){
         time_tmp = time_run;
         system(cmd_buf);
     }
@@ -47,8 +47,8 @@ static void set_timer(void)
     struct itimerval sectime;
     sectime.it_interval.tv_sec = 1;
     sectime.it_interval.tv_usec = 0;
-    sectime.it_value.tv_sec = 0;
-    sectime.it_value.tv_usec = 1;
+    sectime.it_value.tv_sec = 1;
+    sectime.it_value.tv_usec = 0;
     setitimer(ITIMER_REAL,&sectime,NULL);
 
 }

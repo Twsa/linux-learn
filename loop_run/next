@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+setup_dir=.
+conf_dir=$setup_dir/next.conf
+tmp_dir=$setup_dir/next.tmp
+if [ ! -d $setup_dir ]; then
+  mkdir $setup_dir
+fi
+if [ ! -e $conf_dir ] || [ ! -e $tmp_dir ]; then
+    touch $conf_dir $tmp_dir
+fi
+help()
+{
+    echo "-h help"
+    echo "-l list"
+    echo "-c config <first> <last>"
+    echo "-r run"
+}
+
+#配置起始和结束
+config()
+{
+    if [ $1 ] && [ $2 ] && [  $1 -gt 0 ] && [ $2 -gt 0 ]; then #判断参数是否存在
+        if [ $1 -gt $2 ] ; then
+            echo "<first> canoot be bigger than <last>"
+        else
+            > $conf_dir      #清空文件
+            echo -e "$1\n$2" > $conf_dir 
+            echo $1 > $tmp_dir
+        fi
+    else
+        echo "please input positive integer<first> <last>"
+        help
+    fi
+}
+#开始运行
+run()
+{
+    if [ -s $conf_dir ] ;  then
+        count_tmp=`sed -n '1p' $tmp_dir`       
+        count_last=`sed -n '2p' $conf_dir`
+        if [ $count_tmp -eq $count_last ] ; then
+            echo $count_tmp
+        else
+            echo $count_tmp
+            ((count_tmp++))
+            echo $count_tmp > $tmp_dir
+        fi
+
+    else
+        echo "$conf_dir not existed or it have nothing."
+    fi
+}
+#列出所有的已经添加的目录
+list()
+{
+    cat $conf_dir
+}
+
+#一些事件的处理过程
+case $1 in
+-c)
+    config $2 $3
+    ;;
+-r) 
+    run
+    ;;
+-l)
+    list  
+    ;;
+-h)
+    help 
+    ;;
+*)
+    run
+    ;;
+esac
