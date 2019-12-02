@@ -1,0 +1,10 @@
+sum=0;n=3;in=0;
+until [ "$n" = 0 ];do
+read in
+sum=`expr $sum + $in`
+n=`expr $n - 1`
+done
+echo $sum
+
+
+
