@@ -103,4 +103,102 @@ Buildroot手册由Buildroot开发人员编写。 它是根据GNU通用公共许�
 
 ​	每三个月发布一次Ｂuildroot的版本，分别是2月，5月和11月,发布的版本的序列号的格式是YYY,ＭＭ，所以比如2013.02,2014.08。
 
-​	
+​	发布的压缩包能够在http://buildroot.org/downloads/找到
+
+​	为了你方便地地快速上手，在Buildroot源码的目录树下有一个Vagrantfile文件，它能够快速地配置一个拥有Buildroot的依赖的软件的虚拟机。
+
+​	如果你想要在Linux或者Mac Os X 拥有一个单独的Buildroot的环境，复制下面一行到你的终端中执行：
+
+```html
+curl -O https://buildroot.org/downloads/Vagrantfile; vagrant up
+```
+
+​	如果你是在Windows上玩，复制下面到你的powershell:
+
+```html
+(new-object System.Net.WebClient).DownloadFile(
+"https://buildroot.org/downloads/Vagrantfile","Vagrantfile");
+vagrant up
+```
+
+​	如果要关注开发，可以使用每日快照或克隆Git存储库。 有关更多详细信息，请参考Buildroot网站的“ [Download page](http://buildroot.org/download) ”页面。
+
+## 第四章 Buildroot 快速入门
+
+**注意**：你应该在普通用户下构建所有东西。你没有必要通过获取root权限来配置和使用Buildroot。在普通用户下运行所有的命令可以防止系统阻止编译和安装的过程。
+
+​	使用Buildroot的第一步就是创建一个配置文件。Buildroot有非常好用的配置工具，它同linux内核或者buxybox工具的配置工具非常相似。
+
+在buildroot目录下，运行
+
+```html
+ $ make menuconfig
+```
+
+这个是用基于原始的光标来配置
+
+```html
+ $ make nconfig
+```
+
+这个是用新的光标来配置
+
+```html
+ $ make xconfig
+```
+
+这个是用基于QT来配置
+
+```html
+ $ make gconfig
+```
+
+这个是基于GTK来配置
+
+​	以上的所有的“make”命令将会构建一个配置buildroot的工具（包括接口），所以你也许需要为你的配置工具所依赖的库安装“devl”包。参考[Chapter 2, *System requirements*](http://nightly.buildroot.org/#requirement)查看详情，特别是关于获取你需要的软件的依赖包这一节[optional requirements](http://nightly.buildroot.org/#requirement-optional) [Section 2.2, “Optional packages”](http://nightly.buildroot.org/#requirement-optional)
+
+​	对于配置工具的每个菜单选项，你都能找到帮助和相关描述，参考[Chapter 6, *Buildroot configuration*](http://nightly.buildroot.org/#configure) 了解一些特殊配置方面的相关细节。
+
+​	一旦所有的配置选项都配置完毕，配置工具就会生成一个.config文件，这个文件包含所有的配置信息。这个配置文件将会被顶层的Makefile文件读取。
+
+​	开始构建只需要运行：
+
+```html
+ $ make
+```
+
+​	你决不能用make -jN来构建Buildroot：因为顶层目录的make当前不支持。而是使用BR2_JLEVEL选项告诉Buildroot使用make -jN运行每个软件包的编译。
+
+ 	make命令会按照下面的步骤执行：
+
+- 下载源文件（如果需要的话）；
+- 配置，构建和安装交叉编译工具链，或者只是导入外部工具链；
+
+- 配置，构建和安装目标包；
+- 构建一个内核镜像（如果你有选择）
+- 构建一个bootloader镜像（如果你有选择）；
+- 按你所选择的格式创建跟文件系统。
+
+Buildroot 的make之后的输出是存放在一个单独的目录中，<font color=#0000FF >output/</font>。这个目录包含以下几个目录：
+
+- <font color=#0000FF >images/</font> 目录存放了所有的镜像文件(内核镜像，bootloader和根文件系统镜像)，这些就是你需要放进目标系统的镜像文件。
+
+- <font color=#0000FF >build/</font>  目录下存放着所有已经构建的组件（这些组件包括在主机系统中的Buildroot工具和为目标系统编译生成的包）。每一个组件在该目录下都有一个子目录。
+- <font color=#0000FF >host/</font> 目录包含了已经构建的主机需要的工具和目标系统的工具链的sysroot。前者是为了能够正确执行Buildroot而为主机系统安装一些编译好的工具，包括交叉编译工具链。后者是类似于跟文件系统层次结构的层次结构。它包含提供给用户的软件包的头文件和一些库，并且可以通过已经在使用的软件包来安装这些库。不得不说的是，这个目录并不是目标系统的根文件目录：它包含对于嵌入式系统来说非常庞大的的一些开发文件，未压缩的二进制文件和一些库文件。这些开发文件被用来为目标系统编译一些库和应用程序。
+- <font color=#0000FF >staging/</font>  是/host目录中的目标系统的sysroot的符号链接，这样做是为了向后兼容。
+- <font color=#0000FF >target/</font> 这个目录几乎包含了完整的目标系统的完整的根文件系统：除了/dev目录下一些设备驱动的相关文件（Buildroot 不能创建这些文件是因为Buildroot不能以root权限运行，我们也不希望在root用户下运行），其他的文件系统该有的这个目录都有了。也就是说Buildroot没有正确的权限（比如为busybox的二进制文件setuid）。因此，这个目录还不能直接用在你的目标系统中去，相反，正确的操作是将images/目录的镜像烧写到你的板子中去。如果你想要通过NFS挂载根文件系统而需要一个解压过的根文件系统的镜像，你可以通过以root权限解压images/下的压缩的根文件镜像。相比较于staging/`, `target/目录仅仅包含目标程序运行所需要的文件和库：没有开发文件，二进制文件被压缩。make menuconfig|nconfig|gconfig|xconfig和make这些命令可以简单快速的生成满足你的需求的镜像，它包含你所选择的所有u的应用程序和功能。
+
+更多关于"make"命令的详情请参考[Section 8.1, “*make* tips”](http://nightly.buildroot.org/#make-tips).
+
+## 第五章 社区资源
+
+像所有的开源项目一样，Buildroot在社区内或之外有许多方式共享资源和分享最新资讯的方式。
+
+如果你在想搞懂Buildroot或者对Buildroot项目做些贡献的时候需要一些帮助，可能下面的其中的一种途径可以帮助到你。
+
+<font color=#0000FF >Mailing List（邮件列表）</font>
+
+​		Buildroot有一个讨论和开发的邮件列表,这是Buildroot用户和开发者们沟通交互的主要方式。
+
+
+
