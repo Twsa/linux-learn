@@ -186,7 +186,7 @@ Buildroot 的make之后的输出是存放在一个单独的目录中，<font col
 - <font color=#0000FF >build/</font>  目录下存放着所有已经构建的组件（这些组件包括在主机系统中的Buildroot工具和为目标系统编译生成的包）。每一个组件在该目录下都有一个子目录。
 - <font color=#0000FF >host/</font> 目录包含了已经构建的主机需要的工具和目标系统的工具链的sysroot。前者是为了能够正确执行Buildroot而为主机系统安装一些编译好的工具，包括交叉编译工具链。后者是类似于跟文件系统层次结构的层次结构。它包含提供给用户的软件包的头文件和一些库，并且可以通过已经在使用的软件包来安装这些库。不得不说的是，这个目录并不是目标系统的根文件目录：它包含对于嵌入式系统来说非常庞大的的一些开发文件，未压缩的二进制文件和一些库文件。这些开发文件被用来为目标系统编译一些库和应用程序。
 - <font color=#0000FF >staging/</font>  是/host目录中的目标系统的sysroot的符号链接，这样做是为了向后兼容。
-- <font color=#0000FF >target/</font> 这个目录几乎包含了完整的目标系统的完整的根文件系统：除了/dev目录下一些设备驱动的相关文件（Buildroot 不能创建这些文件是因为Buildroot不能以root权限运行，我们也不希望在root用户下运行），其他的文件系统该有的这个目录都有了。也就是说Buildroot没有正确的权限（比如为busybox的二进制文件setuid）。因此，这个目录还不能直接用在你的目标系统中去，相反，正确的操作是将images/目录的镜像烧写到你的板子中去。如果你想要通过NFS挂载根文件系统而需要一个解压过的根文件系统的镜像，你可以通过以root权限解压images/下的压缩的根文件镜像。相比较于staging/`, `target/目录仅仅包含目标程序运行所需要的文件和库：没有开发文件，二进制文件被压缩。make menuconfig|nconfig|gconfig|xconfig和make这些命令可以简单快速的生成满足你的需求的镜像，它包含你所选择的所有u的应用程序和功能。
+- <font color=#0000FF >target/</font> 这个目录几乎包含了完整的目标系统的完整的根文件系统：除了/dev目录下一些设备驱动的相关文件（Buildroot 不能创建这些文件是因为Buildroot不能以root权限运行，我们也不希望在root用户下运行）外，其他的文件系统该有的这个目录都有了。也就是说Buildroot没有正确的权限（比如为busybox的二进制文件setuid）。因此，这个目录还不能直接用在你的目标系统中去，相反，正确的操作是将images/目录的镜像烧写到你的板子中去。如果你想要通过NFS挂载根文件系统而需要一个解压过的根文件系统的镜像，你可以通过以root权限解压images/下的压缩的根文件镜像。相比较于staging/`, `target/目录仅仅包含目标程序运行所需要的文件和库：没有开发文件，二进制文件被压缩。make menuconfig|nconfig|gconfig|xconfig和make这些命令可以简单快速的生成满足你的需求的镜像，它包含你所选择的所有u的应用程序和功能。
 
 更多关于"make"命令的详情请参考[Section 8.1, “*make* tips”](http://nightly.buildroot.org/#make-tips).
 
@@ -198,7 +198,39 @@ Buildroot 的make之后的输出是存放在一个单独的目录中，<font col
 
 <font color=#0000FF >Mailing List（邮件列表）</font>
 
-​		Buildroot有一个讨论和开发的邮件列表,这是Buildroot用户和开发者们沟通交互的主要方式。
+​		Buildroot有一个讨论和开发的邮件列表,这是Buildroot用户和开发者们沟通交互的主要方式。只有Buildroot的邮件列表的订阅者才能在这个列表中发邮件。你能通过这个网址 [mailing list info page](http://lists.buildroot.org/mailman/listinfo/buildroot)来订阅。
 
+​	发送到邮件列表的的邮件也可以在[gmane.comp.lib.uclibc.buildroot](http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot)的 [mailing list archives](http://lists.buildroot.org/pipermail/buildroot)并通过[Gmane](http://gmane.org)查看到。在提问之前请查看邮件列表的归档，因为有可能在之前已经有人问过同样的问题。
 
+<font color=#0000FF >IRC（因特网中继聊天（Internet Relay Chat））</font>
+
+​	Buildroot的IRC频道[#buildroot](irc://freenode.net/#buildroot) 托管在 [Freenode](http://webchat.freenode.net)上，这是一个快速提问或者围绕这特定的主题进行讨论的好地方。
+
+​	当你在IRC上面寻求帮助的时候，请用代码共享网站（比如：http://code.bulix.org.）挂上你的问题的相关的日志或者是代码的片段。
+
+​	请注意，对于特定的问题，也许发邮件到邮件列表会是一个更好的选择，因为在邮件列表中能接触到更多的人，包括用户和开发者。
+
+<font color=#0000FF >Bug tracker (错误追踪器)</font>
+
+​	Buildroot中的bug可以通过邮件列表或者通过[Buildroot bugtracker](https://bugs.buildroot.org/buglist.cgi?product=buildroot)来上报。请在创建bug报告之前参阅
+
+[Section 21.6, “Reporting issues/bugs or getting help”](http://nightly.buildroot.org/#reporting-bugs)
+
+<font color=#0000FF >Wiki</font>
+
+ 	Buildroot的wiki是托管在[eLinux](http://elinux.org)wiki。它包含一些有用的链接，能够纵观Buildroot的的历史和未来的计划。
+
+<font color=#0000FF >PatchWork</font>
+
+​	patchwork是一个基于Web的补丁跟踪系统，旨在促进对开源项目的贡献和贡献的管理。已发送的补丁将会被系统捕获并出现在web页面上。任何发表的引用该补丁的评论也将被附加到补丁的页面上去。更多关于Pathwork请参阅http://jk.ozlabs.org/projects/patchwork/
+
+​	Buildroot的Patchwork网站主要是Buildroot的维护者确保不会漏掉每一个补丁。补丁的审查者同样也在使用它（参阅：[Section 21.3.1, “Applying Patches from Patchwork”](http://nightly.buildroot.org/#apply-patches-patchwork)）
+
+​	但是，由于该网站在简洁明了的Web接口中公开了补丁及其相应的评论，因此它对所有Buildroot开发人员都是有用的。	
+
+​	你能够找到Buildroot的补丁管理接口在http://patchwork.buildroot.org
+
+# 第二卷 用户指导
+
+## 第六章 Buildroot配置
 
