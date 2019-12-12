@@ -16,16 +16,21 @@ char *ctrl_word[11]={"pow","auto","cold_mode","hot_mode",\
 char *online_words[64]={
     "打开空调","关闭空调","调高温度",\
     "调低温度","调高风速","降低风速",\
-    "上下扫风","左右扫风","打开睡眠",\
-    "关闭睡眠"\
+    "上下扫风","关闭上下扫风","左右扫风",\
+    "关闭左右扫风","打开睡眠","关闭睡眠",\
+    "查一下近两日的电量","查一下本月的电量","查一下近两个小时的电量",\
+    "推荐一款空调","打开灯光","关闭灯光",\
+    "关闭健康","打开健康","打开换气",\
+    "关闭换气","打开节能","关闭节能",\
+    "打开干燥","关闭干燥"                                                                                                                                                                                                                                                        
 };   
 
 #include <ctype.h>
 #include "cJSON.h"
-#define JSON_BUF 64
+#define JSON_BUF 1024
 char jsonBuffer[JSON_BUF];
 
-// rcgcc cJSON.c pipe_ser1.c  -o ser1 -lm && adb push ser1 /userdata
+// rcgcc cJSON.c pipe_ser1.c  -o voice_online_one -lm && adb push voice_online_one /userdata
 int main(int argc ,char *argv[])
 {
     int server_fifo_fd;

@@ -3,3 +3,4 @@
 /home/twsa/project1/alps/buildroot/output/wingtech_53316_gree_32/build/
 /home/twsa/project1/alps/external/gree_for_test/
 /home/twsa/project1
+/home/twsa/project/alps/external/gree
