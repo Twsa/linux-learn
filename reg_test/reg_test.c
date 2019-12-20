@@ -15,8 +15,10 @@ int flag = REG_EXTENDED;
 regmatch_t pmatch;
 const size_t nmatch = 1;
 regex_t reg;
-const char *pattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
-char *buf = "123456789@qq.com";//success
+//^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$
+//^([0-9]{3}-|\([0-9]{3}\) )[0-9]{3}-([0-9]{4})$
+const char *pattern = "^([0-9]{3}-|\\([0-9]{3}\\) )[0-9]{3}-[0-9]{4}";
+char *buf = "987-123-4567\n123 456 7890\n(123) 456-7890";//success
 // char *buf = "###270401@163.com";//error
 
 regcomp(&reg, pattern, flag);

@@ -22,7 +22,11 @@ char *online_words[64]={
     "推荐一款空调","打开灯光","关闭灯光",\
     "关闭健康","打开健康","打开换气",\
     "关闭换气","打开节能","关闭节能",\
-    "打开干燥","关闭干燥"                                                                                                                                                                                                                                                        
+    "打开干燥","关闭干燥","切换到自动模式",\
+    "切换到制冷","切换到除湿","切换到制热",\
+    "切换到送风","空调切换到自动风速","空调切换到低风速",\
+    "空调切换到中低风速","空调切换到中风速","空调切换到中高风速",\
+    "空调切换到高风速","空调切换到静音","温度设为16度"
 };   
 
 #include <ctype.h>
@@ -30,7 +34,7 @@ char *online_words[64]={
 #define JSON_BUF 1024
 char jsonBuffer[JSON_BUF];
 
-// rcgcc cJSON.c pipe_ser1.c  -o voice_online_one -lm && adb push voice_online_one /userdata
+// rcgcc cJSON.c pipe_ser1.c  -o voice_online_one -lm && cp voice_online_one ~/Desktop/my_test/busybox_twsa/ && adb push voice_online_one /data
 int main(int argc ,char *argv[])
 {
     int server_fifo_fd;
