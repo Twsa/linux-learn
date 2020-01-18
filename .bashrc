@@ -115,16 +115,16 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-alias rcg++='$HOME/project/alps/buildroot/output/wingtech_53316_gree_32/host/bin/arm-rockchip-linux-gnueabihf-g++'
-alias rcgdb='$HOME/project/alps/buildroot/output/wingtech_53316_gree_32/host/bin/arm-rockchip-linux-gnueabihf-gdb'
-alias rcgcc='$HOME/project/alps/buildroot/output/wingtech_53316_gree_32/host/bin/arm-rockchip-linux-gnueabihf-gcc'
+alias rcg++='$HOME/air-friend/alps/buildroot/output/wingtech_53316_gree_32/host/bin/arm-rockchip-linux-gnueabihf-g++'
+alias rcgdb='$HOME/air-friend/alps/buildroot/output/wingtech_53316_gree_32/host/bin/arm-rockchip-linux-gnueabihf-gdb'
+alias rcgcc='$HOME/air-friend/alps/buildroot/output/wingtech_53316_gree_32/host/bin/arm-rockchip-linux-gnueabihf-gcc'
 export PATH=~/qemu/mini2440/bin:$PATH
 alias mypr='cd /home/twsa/project/alps'
 alias gpl='firefox  https://yun1.gree.com/im/xiaoxi'
-export PATH=/$HOME/project/alps/buildroot/output/wingtech_53316_gree_32/host/bin:$PATH
+export PATH=/$HOME/air-friend/alps/buildroot/output/wingtech_53316_gree_32/host/bin:$PATH
 export PATH=~/Downloads/Typora-linux-x64:$PATH
 alias dog='source $HOME/Desktop/my_test/dog.sh'
 alias dia='env GTK_IM_MODULE=xim dia'
 export REPO_URL='https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/'
 source ~/.myminicom.sh
-source ~/.myminicom.sh
+export PATH=/home/twsa/Desktop/my_test/socket_test/tcp_socket:$PATH
